@@ -1,11 +1,8 @@
 let score = 0;
-
-// アップグレードの初期値
 let clickPower = 1;
 let autoPower = 0;
 let multi = 1;
 
-// コスト
 let costClick = 10;
 let costAuto = 50;
 let costMulti = 200;
@@ -20,13 +17,52 @@ const costClickEl = document.getElementById("costClick");
 const costAutoEl = document.getElementById("costAuto");
 const costMultiEl = document.getElementById("costMulti");
 
-// クリックで増加
+// ----------------------
+//  セーブデータ読み込み
+// ----------------------
+function loadGame() {
+  const data = JSON.parse(localStorage.getItem("clickerSave"));
+  if (!data) return;
+
+  score = data.score;
+  clickPower = data.clickPower;
+  autoPower = data.autoPower;
+  multi = data.multi;
+
+  costClick = data.costClick;
+  costAuto = data.costAuto;
+  costMulti = data.costMulti;
+
+  updateDisplay();
+}
+
+// ----------------------
+//  セーブデータ保存
+// ----------------------
+function saveGame() {
+  const data = {
+    score,
+    clickPower,
+    autoPower,
+    multi,
+    costClick,
+    costAuto,
+    costMulti
+  };
+  localStorage.setItem("clickerSave", JSON.stringify(data));
+}
+
+// 1秒ごとに自動保存
+setInterval(saveGame, 1000);
+
+// ----------------------
+//  ゲーム処理
+// ----------------------
 document.getElementById("clickBtn").addEventListener("click", () => {
   score += clickPower * multi;
   updateDisplay();
 });
 
-// クリックパワー強化
 document.getElementById("upgradeClick").addEventListener("click", () => {
   if (score >= costClick) {
     score -= costClick;
@@ -36,7 +72,6 @@ document.getElementById("upgradeClick").addEventListener("click", () => {
   }
 });
 
-// オートクリック強化
 document.getElementById("upgradeAuto").addEventListener("click", () => {
   if (score >= costAuto) {
     score -= costAuto;
@@ -46,7 +81,6 @@ document.getElementById("upgradeAuto").addEventListener("click", () => {
   }
 });
 
-// 倍率アップ
 document.getElementById("upgradeMulti").addEventListener("click", () => {
   if (score >= costMulti) {
     score -= costMulti;
@@ -56,7 +90,7 @@ document.getElementById("upgradeMulti").addEventListener("click", () => {
   }
 });
 
-// 自動生成（1秒ごと）
+// 自動生成
 setInterval(() => {
   score += autoPower * multi;
   updateDisplay();
@@ -73,3 +107,8 @@ function updateDisplay() {
   costAutoEl.textContent = costAuto;
   costMultiEl.textContent = costMulti;
 }
+
+// ----------------------
+//  起動時にロード
+// ----------------------
+loadGame();
