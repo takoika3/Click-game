@@ -1,0 +1,16 @@
+body {
+  text-align: center;
+  font-family: sans-serif;
+  margin-top: 80px;
+}
+
+#score {
+  font-size: 48px;
+  margin: 20px;
+}
+
+#clickBtn {
+  font-size: 24px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
